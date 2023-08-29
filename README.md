@@ -16,7 +16,7 @@ Checkout the offical project [here](https://github.com/MQYForverT/vue-drag-level
 ## 效果
 下图中你不喜欢的图标皆提供插槽以供自定义
 
-![](public/vue-drag-level.gif)
+![](dist/vue-drag-level.gif)
 
 # Installation
 
