@@ -1,0 +1,84 @@
+.level-drag-main {
+  position: relative;
+  user-select: none;
+}
+
+.level-drag-plan-item-line {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  height: 100%;
+  border: 1px dashed #f56c6c;
+  transform: translateX(-50%);
+  z-index: 999;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.level-drag-line-show {
+  opacity: 1;
+}
+
+.levelDragItem {
+  position: relative;
+  width: fit-content;
+  z-index: 9999;
+}
+
+.levelDragItemDisabled {
+  border: 1px solid #ddd;
+  background-color: #f5f5f5;
+  color: #aca899;
+  cursor: no-drop;
+}
+
+.planItemBottom {
+  border-bottom: 3px solid #f56c6c !important;
+}
+
+.planItemTop {
+  border-top: 3px solid #f56c6c !important;
+}
+
+.groupItem {
+  position: relative;
+}
+
+.allowGroup {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.levelGroup {
+  cursor: pointer;
+  right: -15px;
+}
+
+.joinGroup {
+  left: -15px;
+}
+
+.move {
+  cursor: move;
+}
+
+/* ----------------动画start-----------------*/
+.list-move, /* 对移动中的元素应用的过渡 */
+.list-enter-active,
+.list-leave-active {
+  transition: all 0.3s cubic-bezier(0.55, 0, 0.1, 1);
+}
+
+.list-enter-from,
+.list-leave-to {
+  opacity: 0;
+  transform: scaleY(0.01) translate(30px, 0);
+}
+
+/* 确保将离开的元素从布局流中删除
+  以便能够正确地计算移动的动画。 */
+.list-leave-active {
+  position: absolute;
+}
+/* ----------------动画end-----------------*/
