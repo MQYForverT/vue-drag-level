@@ -16,7 +16,11 @@ Checkout the offical project [here](https://github.com/MQYForverT/vue-drag-level
 ## 效果
 下图中你不喜欢的图标皆提供插槽以供自定义
 
+1、第一层拖拽为组
 ![](https://oss-cdn.mashibing.com/default/634cfd9e6405685a2bd03efcd84d9846.gif)
+
+2、树形拖拽
+![](https://oss-cdn.mashibing.com/default/dcf89b00b2a6fd98239fd2e00fd99c28.gif)
 
 # Installation
 
@@ -44,31 +48,31 @@ app.mount('#app')
 ```html
 <template>
   <div>
-    <vueDragLevel
+    <dragLevel
       groupDrag
+      treeDrag
       :data="departResultStrings"
-      :no-row-drag-class="['itemBox', 'itemDisabled']"
-      :no-column-drag-class="['itemDisabled']"
+      :no-drag-class="['itemDisabled']"
       @onDragEnd="onDragEnd"
+      @delItem="delItem"
     >
       <template #default="{ item }">
         <div
           :class="{
             itemBox: true,
-            itemDisabled: item.id < 3,
+            itemDisabled: item.id == 1,
           }"
         >
           <span>{{ item.name }}</span>
         </div>
       </template>
-    </vueDragLevel>
+    </dragLevel>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from "vue";
-import { vueDragLevel } from "vue-drag-level";
-import "vue-drag-level/dist/style.css";
+import dragLevel from "./components/index.vue";
 
 const departResultStrings = ref([
   {
@@ -76,12 +80,12 @@ const departResultStrings = ref([
     name: "row1",
   },
   {
-    id: 2,
-    name: "row2",
-  },
-  {
     id: 3,
     name: "row3",
+  },
+  {
+    id: 2,
+    name: "row2",
   },
   {
     id: 4,
@@ -99,16 +103,27 @@ const departResultStrings = ref([
     id: 7,
     name: "row7",
   },
-  {
-    id: 8,
-    name: "row8",
-  },
 ]);
 
 function onDragEnd(res: any) {
   console.log(res);
 }
+
+function delItem(res: any, fn: Function) {
+  // 执行自己的逻辑
+  console.log(res);
+
+  // 回调如果false，阻止组件的默认删除行为
+  fn(true);
+}
 </script>
+
+<style scoped>
+.itemBox {
+  padding: 5px 10px;
+  border-bottom: 1px solid #ccc;
+}
+</style>
 ```
 
 ## Properties
@@ -117,15 +132,18 @@ function onDragEnd(res: any) {
 
 | 参数      | 类型         | 默认值 | 说明              |
 | ------------- | ------------ | --------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
-| data          | Array<object> |         | 显示的数据 |
-| id    | String       | id      | 数据的唯一值key                                             |
-| levelKey     | String       | level      | 不同等级的key区分值     |
-| levelGap | String       | 30px     | 不同等级的间隔                                        |
-| noRowDragClass    | Array<string>       | []     | 禁止横向拖拽的class元素                            |
-| noColumnDragClass     | Array<string>    | []     | 禁止竖向拖拽的class元素                             |
-| groupDrag     | Boolean       | false      | 开启组拖拽           |
-| groupKey     | String       | groupId        | 组拖拽中的组key                   |
-| groupItemStyle     | String       | border: 1px solid red;margin-bottom: 10px;        | 自定义组item样式                   |
+| data          | Array |    []     | 显示的数据 |
+| id          | String |     id  |  唯一id-key
+| noDragClass    | Array       | []     | 禁止拖拽的class元素                       |
+| treeDrag     | Boolean       | false      | 允许树形拖拽，拖拽时，虚线左边是同级，虚线右边是子级     |
+| levelGap | String       | 30px     | 树形中，不同层级的间隔                                        |
+| groupDrag     | Boolean       | false      | 允许第一级拖拽成组           |
+| groupKey     | String       | parentId        | 唯一父级key                   |
+| groupListKey     | String       | children        | 唯一子级List-key                   |
+| showGroupTagLine     | Boolean       | true        | 是否显示不同组之间的分隔标识线                  |
+| groupDragHover     | Boolean       | true        | 组拖拽按钮鼠标浮动出现，默认true，为false将一存直在         |
+| levelByTop     | Boolean       | false        | 组项离开组时回到最外层数组或者父层所在数组，默认回到父层所在数组                  |
+| showDelBtn     | Boolean       | true        | 是否展示删除按钮        |
 
 ## Events
 
@@ -133,7 +151,17 @@ function onDragEnd(res: any) {
 
 | 事件名称        | Description            | Usage                      |
 | ------------ | ---------------------- | -------------------------- |
-| onDragEnd     | 每次拖拽的数据回调 | `@onDragEnd="doSmth()"`     |
+| onDragEnd     | 每次操作数据的回调 | `@onDragEnd="doSomeThing()"`     |
+| delItem     | 点击删除的数据回调 | `@delItem="delItem()"`     |
+```js
+function delItem(res: any, fn: Function) {
+  // 执行自己的逻辑
+  console.log(res);
+
+  // 回调如果false，阻止组件的默认删除行为
+  fn(true);
+}
+```   
 
 ## Slots
 
@@ -142,14 +170,15 @@ function onDragEnd(res: any) {
 | 插槽名称   | 说明 |
 | ------ | ----------- |
 | default| 自定义列的内容，参数为 {item}      |
-| joinGroup | 组拖拽模式下，加入组的样式内容      |
-| levelGroup | 组拖拽模式下，离开组的样式内容      |
-| groupDrag | 组拖拽模式下，拖拽组的样式内容      |
+| joinGroup | 加入组的样式内容      |
+| levelGroup | 离开组的样式内容      |
+| groupDrag | 拖拽组的样式内容      |
+| delete | 删除的样式内容      |
 
 ## Features
 
-暂时没有，欢迎来访
-
+- [ ] 树形拖拽操作的交互优化，比如出现两个按钮替换虚线的左右
+- [ ] 组拖拽为单行数据的子级
 ---
 
 # License

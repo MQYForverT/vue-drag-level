@@ -40,8 +40,14 @@
   border-top: 3px solid #f56c6c !important;
 }
 
-.groupItem {
-  position: relative;
+.groupItemClass {
+  width: fit-content;
+  border-left: 1px dashed red;
+  border-bottom: 1px dashed red;
+}
+
+.groupGap {
+  margin-left: 8px;
 }
 
 .allowGroup {
@@ -55,12 +61,33 @@
   right: -15px;
 }
 
+.delete{
+  right: -50px;
+}
+
 .joinGroup {
   left: -15px;
 }
 
+.groupDragBtn {
+  left: -12px;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(255, 0, 0, 0.1);
+}
+
 .move {
   cursor: move;
+}
+
+.relative {
+  position: relative;
+}
+
+.displayNone {
+  display: none;
 }
 
 /* ----------------动画start-----------------*/

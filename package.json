@@ -1,7 +1,7 @@
 {
   "name": "vue-drag-level",
   "private": false,
-  "version": "1.0.1",
+  "version": "2.0.0",
   "type": "module",
   "files": [
     "dist"
@@ -35,6 +35,7 @@
     "vueDraggle",
     "拖拽",
     "同级拖拽",
-    "分组拖拽"
+    "树形拖拽",
+    "父子级"
   ]
 }

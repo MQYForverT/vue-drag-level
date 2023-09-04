@@ -2,16 +2,17 @@
   <div>
     <dragLevel
       groupDrag
+      treeDrag
       :data="departResultStrings"
-      :no-row-drag-class="['itemBox','itemDisabled']"
-      :no-column-drag-class="['itemDisabled']"
+      :no-drag-class="['itemDisabled']"
       @onDragEnd="onDragEnd"
+      @delItem="delItem"
     >
       <template #default="{ item }">
         <div
           :class="{
             itemBox: true,
-            itemDisabled: item.id < 3
+            itemDisabled: item.id == 1,
           }"
         >
           <span>{{ item.name }}</span>
@@ -31,12 +32,12 @@ const departResultStrings = ref([
     name: "row1",
   },
   {
-    id: 2,
-    name: "row2",
-  },
-  {
     id: 3,
     name: "row3",
+  },
+  {
+    id: 2,
+    name: "row2",
   },
   {
     id: 4,
@@ -54,14 +55,18 @@ const departResultStrings = ref([
     id: 7,
     name: "row7",
   },
-  {
-    id: 8,
-    name: "row8",
-  },
 ]);
 
 function onDragEnd(res: any) {
   console.log(res);
+}
+
+function delItem(res: any, fn: Function) {
+  // 执行自己的逻辑
+  console.log(res);
+
+  // 回调如果false，阻止组件的默认删除行为
+  fn(true);
 }
 </script>
 
