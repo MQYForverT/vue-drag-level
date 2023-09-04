@@ -6,7 +6,6 @@
       :data="departResultStrings"
       :no-drag-class="['itemDisabled']"
       @onDragEnd="onDragEnd"
-      @delItem="delItem"
     >
       <template #default="{ item }">
         <div
@@ -59,14 +58,6 @@ const departResultStrings = ref([
 
 function onDragEnd(res: any) {
   console.log(res);
-}
-
-function delItem(res: any, fn: Function) {
-  // 执行自己的逻辑
-  console.log(res);
-
-  // 回调如果false，阻止组件的默认删除行为
-  fn(true);
 }
 </script>
 

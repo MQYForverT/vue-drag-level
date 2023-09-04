@@ -54,7 +54,6 @@ app.mount('#app')
       :data="departResultStrings"
       :no-drag-class="['itemDisabled']"
       @onDragEnd="onDragEnd"
-      @delItem="delItem"
     >
       <template #default="{ item }">
         <div
@@ -108,14 +107,6 @@ const departResultStrings = ref([
 function onDragEnd(res: any) {
   console.log(res);
 }
-
-function delItem(res: any, fn: Function) {
-  // 执行自己的逻辑
-  console.log(res);
-
-  // 回调如果false，阻止组件的默认删除行为
-  fn(true);
-}
 </script>
 
 <style scoped>
@@ -144,7 +135,7 @@ function delItem(res: any, fn: Function) {
 | groupDragHover     | Boolean       | true        | 组拖拽按钮鼠标浮动出现，默认true，为false将一存直在         |
 | levelByTop     | Boolean       | false        | 组项离开组时回到最外层数组或者父层所在数组，默认回到父层所在数组                  |
 | showDelBtn     | Boolean       | true        | 是否展示删除按钮        |
-
+| beforeDelete     | function(res)       |  true        | 删除之前的钩子，参数为删除的数据，若定义该函数，则必须返回 true 或者返回 Promise 且被 resove，才会执行删除；返回其他均不执行删除        |
 ## Events
 
 你能使用以下事件:
@@ -152,16 +143,7 @@ function delItem(res: any, fn: Function) {
 | 事件名称        | Description            | Usage                      |
 | ------------ | ---------------------- | -------------------------- |
 | onDragEnd     | 每次操作数据的回调 | `@onDragEnd="doSomeThing()"`     |
-| delItem     | 点击删除的数据回调 | `@delItem="delItem()"`     |
-```js
-function delItem(res: any, fn: Function) {
-  // 执行自己的逻辑
-  console.log(res);
-
-  // 回调如果false，阻止组件的默认删除行为
-  fn(true);
-}
-```   
+| delItem     | 点击删除的数据回调 | `@delItem="doSomeThing()"`     |  
 
 ## Slots
 

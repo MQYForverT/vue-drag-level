@@ -155,13 +155,14 @@
 
 <script setup lang="ts">
 import { inject } from "vue";
+import { dragProps } from "./index";
 
 defineOptions({
   name: "dragLevelItem",
 });
 
-const props: any = inject("props");
-const dragData: any[] = inject("dragData") as Array<any>;
+const props = inject("props") as dragProps;
+const dragData = inject("dragData") as Array<any>;
 const state: any = inject("state");
 
 const prop = defineProps({
@@ -179,17 +180,15 @@ const prop = defineProps({
 
 const emit = defineEmits<{
   onDragEnd: [data: any];
-  delItem: [item: any, func: Function];
+  delItem: [item: any];
 }>();
 
 function onDragEnd(res: any) {
   emit("onDragEnd", res);
 }
 
-function delItem(res: any, fn: Function) {
-  emit("delItem", res, (flag: Boolean) => {
-    fn(flag);
-  });
+function delItem(res: any) {
+  emit("delItem", res)
 }
 
 function handleDragStart(item: any, event: DragEvent) {
@@ -318,20 +317,21 @@ function handleDelFunc(item: any, groupList: { [key: string]: any }[], flag: boo
 
   // 移除样式
   if (type === 'item') {
-    removeClass(item, `#levelDrag${item.id}`);
+    removeClass(dragItem, `#levelDrag${dragItem.id}`);
   } else {
-    removeClass(item, `#levelGroupDrag${item.id}`);
+    removeClass(dragItem, `#levelGroupDrag${dragItem.id}`);
   }
 
-  // 是否注册了onDelItem方法
-  if (state.signUpOnDelItem) {
-    emit("delItem", item, (flag: Boolean = false) => {
-      if (flag) {
-        defaultDo();
-      }
-    });
-  } else {
-    defaultDo();
+  const before = props.beforeDelete(dragItem);
+
+  if (typeof before === 'boolean') {
+    if (before) {
+      defaultDo()
+    }
+  } else if (before instanceof Promise) {
+    before.then(() => {
+      defaultDo()
+    })
   }
 
   function defaultDo() {

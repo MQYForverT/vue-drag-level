@@ -61,6 +61,13 @@ export const dragProps = {
     type: Boolean,
     default: true,
   },
+  // 删除之前的钩子，参数为删除的数据，若定义该函数，则必须返回 true 或者返回 Promise 且被 resove，才会执行删除；返回其他均不执行删除
+  beforeDelete: {
+    type: Function,
+    default: (): Boolean | Promise<Boolean> => {
+      return true;
+    },
+  },
 };
 // ExtractPropTypes:提取属性类型
 export type dragProps = ExtractPropTypes<typeof dragProps>;

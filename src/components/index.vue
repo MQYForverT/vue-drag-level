@@ -14,7 +14,7 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, nextTick, provide, useAttrs } from "vue";
+import { reactive, nextTick, provide } from "vue";
 import { dragProps } from "./index";
 import "./style/index.css";
 
@@ -23,8 +23,6 @@ import dragLevelItem from "./dragLevelItem.vue";
 defineOptions({
   name: "vueDragLevel",
 });
-
-const attrs = useAttrs();
 
 const state = reactive({
   dragData: [] as Array<any>,
@@ -44,12 +42,7 @@ const itemState = reactive({
   isHandleDrop: false, // 是否在执行项其他事件（为了不触发项拖拽事件）
   isHandleDragStart: false, // 项是否开始拖拽了
   isHandleGroupDrag: false, // 组是否开始拖拽了
-  signUpOnDelItem: false,
 });
-
-if (attrs.onDelItem) {
-  itemState.signUpOnDelItem = true;
-}
 
 provide("state", itemState);
 
